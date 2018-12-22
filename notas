@@ -1,0 +1,6 @@
+Por default, si no se escifica el tipo de dato, los numeros con punto son manejados como Double.
+
+Los tipos Int pueden ser Int8, Int16, Int32, Int64.
+Por default en los procesadores de 64 bits el Int por defecto es Int64, mientras que en los de 32 bits es Int32.
+
+Tambien existen los tipos de dato UInt8, UInt16, UInt32 y UInt64. Estos solo pueden guardar numeros mayoreso iguales a 0.
