@@ -2,10 +2,11 @@ import Foundation
 
 class Account {
     var amount: Float = 0{
+        //El disparador willSet se ejecuta antes de que el valor de la variable cambie.
         willSet (nextValuue){ //La variable nextValue contiene el nuevo valor que tendra la variable amount una vez realizado el set. Esta variable puede no declararse y por defecto se llamara newValue.
             print("The current amount is: \(amount). The new amount will be \(nextValuue)")
         }
-
+        //El disparador didSet se ejecuta despues de que el valor de la variable cambio.
         didSet{
             print("The new amount is: \(amount)")
         }
@@ -34,17 +35,22 @@ class Person {
     var lastName: String
     var account: Account?
     var fullName: String {
+        //Manera de regresar un valor compuesto dentro de la propiedad fullName. Tambien es posible usar solo la sentencia return y el valor,
+        // si no es necesario hacer ninguna operacion dentro del get.
         get{
             return "\(name) \(lastName)"
         }
+        set{ //El metodo set se ejecuta antes de cambiar el valor de la propiedad, por lo tanto la variable aun tiene su viejo valor. Al igual que en willSet se puede acceder al nuevo valor por default llamado newValue o se puede declarar con otro nombre.
+            name = String(newValue.split(separator: " ").first ?? "")
+            lastName = "\(newValue.split(separator: " ").last ?? "")"
+        }
     }
 
+
+    //A diferencia de las structs, las clases obligatoriamente deben tener un init declarado (Lo que en otros lenguajes serian constructores).
     init(name: String, lastName: String){
         self.name = name
         self.lastName = lastName
-    }
-    init(fullName: String){
-        self.fullName = fullName
     }
 }
 
@@ -57,6 +63,11 @@ me.account = account
 
 account.addTransaction(value:20)
 me.account?.addTransaction(value: 30)
+
+var anotherMe = Person(name:"",lastName:"")
+anotherMe.fullName = "Alejandro Suarez"
+print(anotherMe.name)
+print(anotherMe.lastName)
 
 
 print(account.amount)

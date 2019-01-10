@@ -1,5 +1,10 @@
 import Foundation
 
+//La principal diferencia entre un Struct y un Class, es que al iniciar una struct, este vive completamente en memoria, es decir, la variable donde oonde esta almacenada contiene todos los datos de ese estruct.
+//Mientras que con un Class esa variable solo almacena la direccon en memoria donde esta guardado. Si asigna una instancia de una clase  a una nueva variable, ambas variables seguiran refiriendose a la misma instancia
+//y si una modificada, ambas se veran afectadas. Esto ultimo no ocurre con los Struct, ya que cada variable guarda una instancia completamente diferene.
+
+//Otra diferencia clave es que los Struct no soportan herancia.
 struct Account {
     var amount: Float = 0
     var name: String  = ""
