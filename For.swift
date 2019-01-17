@@ -10,7 +10,7 @@ var transactionsDict: [String: [Float]] = [
 
 var total: Float = 0
 for key in transactionsDict.keys {
-    for transaction in transactionsDict[key] ?? []{ //El doble ?? se maneja para indicar que en caso den no encontra un el diccionario un valor para esa key, se regrese un array vacio '[]'
+    for transaction in transactionsDict[key] ?? []{ //El doble ?? se maneja para indicar que en caso de no encontrar en el diccionario un valor para esa key, se regrese un array vacio '[]'
         total += transaction
     }
 }
