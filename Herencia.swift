@@ -1,12 +1,17 @@
 import Foundation
 
-
-enum DebitCategories {
-    case helth
+//Se puede asignar un tipo de dato a los enum. De esta manera, al acceder al property "rawValue" se accederia a ese valor. En este caso al ser de tipo String, el valor seria
+//el mismo texto pero como un String, pudiendo aplicar las funciones y propiedades de un String. Tambien se puede asignar un valor especial a cada uno de los case del enum.
+enum DebitCategories: String {
+    case helth = "Salud"
     case food,services,entertainment
-    case rent, transportation, luxury
+    case rent, transportation, luxury = "Cosas que no necesito"
 }
 
+//En este caso que el valor es de tipo Int, al acceder al property "rawValue", los cases son enumerados desde el 0. Tambien se le puede asignar un valor especial a cada case.
+enum GainCategories: Int {
+    case sale, salary, gift = 10
+}
 class Transaction {
     var value: Float
     var name: String
@@ -27,7 +32,12 @@ class Debit : Transaction {
 }
 
 class Gain : Transaction {
+    var category: GainCategories
 
+    init( value: Float, name: String, category: GainCategories){
+        self.category = category
+        super.init(value: value, name: name)
+    }
 }
 
 class Account {
@@ -56,18 +66,27 @@ class Account {
     }
 
     //Funcion que regresa un listado de todas las transacciones que son Debit
-    func debits() -> [Transaction] {
-        return transactions.filter({$0 is Debit})
+    func debits() -> [Debit] {
+        return transactions.filter({$0 is Debit}) as! [Debit]
     }
 
     //Funcion que regresa un listado de todas las transacciones que son Gain
-    func gains() -> [Transaction] {
-        return transactions.filter({$0 is Gain})
+    func gains() -> [Gain] {
+        return transactions.filter({$0 is Gain}) as! [Gain]
     }
 
-    func transactionsFor(category: DebitCategories) -> [Transaction]{
+    func debitsFor(category: DebitCategories) -> [Transaction]{
         return transactions.filter({(transaction) -> Bool in
             guard let transaction = transaction as? Debit else {
+                return false
+            }
+            return transaction.category == category
+        })
+    }
+
+    func gainsFor(category: GainCategories) -> [Transaction]{
+        return transactions.filter({(transaction) -> Bool in
+            guard let transaction = transaction as? Gain else {
                 return false
             }
             return transaction.category == category
@@ -104,15 +123,26 @@ me.account?.addTransaction(
     transaction: Debit(value: 1000, name: "Chamarra de Mezclilla", category: .luxury)
 )
 me.account?.addTransaction(
-    transaction: Gain(value: 5000, name: "Salario")
+    transaction: Gain(value: 5000, name: "Quincena", category: .salary)
 )
 
 print("The total account is : \(me.account!.amount)")
 
 for gain in me.account!.gains(){
-    print("There was a gain of \(gain.value) for \(gain.name)")
+    print(gain.name, gain.value, gain.category.rawValue)
 }
 
 for debit in me.account!.debits(){
-    print("There was a debit  of \(debit.value) for \(debit.name)")
+    print(debit.name, debit.value, debit.category.rawValue.capitalized)
 }
+
+let debitTransactions = me.account?.debitsFor(category: .food) as? [Debit]
+for transaction in debitTransactions ?? [] {
+    print(transaction.name, transaction.value, transaction.category)
+}
+
+let gainTransactions = me.account?.gainsFor(category: .salary) as? [Gain]
+for transaction in gainTransactions ?? []{
+    print(transaction.name, transaction.value, transaction.category)
+}
+
